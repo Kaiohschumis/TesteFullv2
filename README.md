@@ -1,7 +1,7 @@
 # cliente-api
 
   API para gerenciar os dados de Clientes. É possível fazer a inclusão, alteração, consulta, listagem e exclusão de clientes.
-  Neste projeto mostraremos como armazenar arquivos no MySQL.
+ 
 
 
 
