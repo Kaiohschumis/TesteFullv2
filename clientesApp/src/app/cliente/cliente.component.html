@@ -1,0 +1,172 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" style="color:white;" (click)="listar()">Clientes</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+            aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor02">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" (click)="add()">Adicionar Cliente<span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  
+  <div class="container" id="divPrincipal" #divPrincipal>
+    <div class="form-group">
+                <label for="cpf">Filtrar resultados</label>
+                <input  type="text"  name="filtro" class="form-control" id="filtro"
+                 required>
+                 <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
+                  Filtrar
+                </button>
+              </div>
+    <table class="table talbe-striped table-bordered table-hover" >
+      <tbody>
+          <tr>
+              <th >Foto <i class="fa fa-sort"></i></th>
+              <th data-sortable="true" data-sorter="alphanum">Nome <i class="fa fa-sort"></i></th>
+              <th >CPF <i class="fa fa-sort"></i></th>
+              <th >RG <i class="fa fa-sort"></i></th>
+              <th>CEP </th>
+              <th>Ações</th>
+          </tr>
+          <tr *ngFor="let cliente of clientes" >
+            <td><div class="col-6">
+              <a ><img class="resize" [src]="exibirImagem(cliente.foto)" alt=""></a>
+            </div></td>
+              <td>{{cliente.nome}}</td>
+              <td>{{cliente.cpf}}</td>
+              <td>{{cliente.rg}}</td>
+              <td>{{cliente.cep}}</td>
+              <td>
+                <a (click)="abrirDetalhe(cliente, 'edit')" class="btn btn-primary tooltips" data-placement="top"
+                   data-original-title="Edit"><em class="fa fa-pencil"></em> </a>
+                <a (click)="abrirDetalhe(cliente, 'delete')" class="btn btn-secondary tooltips" data-placement="top"
+                   data-original-title="Delete"><em class="fa fa-times"></em></a>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+    <div class="modal fade" id="clienteModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="clienteLabel">Cadastro de Cliente</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form >
+              <div class="form-group">
+                <label for="cpf">CPF</label>
+                <input  type="text" [(ngModel)]="clienteSelecionado.cpf" name="cpf" class="form-control" id="cpf"
+                mask="000.000.000-00" required>
+              </div>
+              <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" [(ngModel)]="clienteSelecionado.nome" name="nome" class="form-control" id="nome"
+                       placeholder="Nome" required>
+              </div>
+              <div class="form-group">
+                <label for="cep">CEP</label>
+                <input type="text" [(ngModel)]="clienteSelecionado.cep" name="cep" class="form-control" id="cep"
+                       placeholder="CEP" required mask="00000-000">
+                       <button type="button" (click)="buscar(clienteSelecionado.cep)"
+                        class="btn btn-primary">Buscar
+                </button>
+              </div>
+              <div class="form-group">
+                <label for="endereco">Endereço</label>
+                <input type="text" [(ngModel)]="clienteSelecionado.endereco" name="endereco" class="form-control" id="endereco"
+                       placeholder="Endereço" required>
+              </div>
+              <div class="form-group">
+                <label for="numero">Número</label>
+                <input type="text" [(ngModel)]="clienteSelecionado.numero" name="numero" class="form-control" id="numero"
+                       placeholder="Número" required>
+              </div>
+              <div class="form-group">
+                <label for="bairro">Bairro</label>
+                <input type="text" [(ngModel)]="clienteSelecionado.bairro" name="bairro" class="form-control" id="bairro"
+                       placeholder="Bairro" required>
+              </div>
+              <div class="form-group">
+                <label for="complemento">Complemento</label>
+                <input type="text" [(ngModel)]="clienteSelecionado.complemento" name="complemento" class="form-control" id="complemento"
+                       placeholder="Complemento" required>
+              </div>
+              <div class="form-group">
+                <label for="municipio">Município</label>
+                <input type="text" [(ngModel)]="clienteSelecionado.municipio" name="municipio" class="form-control" id="municipio"
+                       placeholder="Município" required>
+              </div>
+              <div class="form-group">
+                <label for="uf">UF</label>
+                <input type="text" [(ngModel)]="clienteSelecionado.uf" name="uf" class="form-control" id="uf"
+                       placeholder="UF" required>
+              </div>
+              <div class="form-group">
+                <label for="rg">RG</label>
+                <input type="text" [(ngModel)]="clienteSelecionado.rg" name="rg" class="form-control" id="rg"
+                       placeholder="RG" required>
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" class="form-control" id="email"
+                       [(ngModel)]="clienteSelecionado.email" placeholder="Email" required>
+              </div>
+              <div class="form-group">
+                <label>Foto</label>
+                <input type="file" style="display: none" (change)="selecionarArquivo($event)" #fileUpload
+                       accept=".png, .jpg, .jpeg, .pdf"/>
+                <button mat-mini-fab color="primary" class="upload-btn">
+                  <span class="material-icons" (click)="fileUpload.click()">upload_file</span>
+                </button>
+              </div>
+              
+              <div class="modal-footer">
+                <button type="button" id="btnFechar" #btnFechar class="btn btn-secondary" data-dismiss="modal">Fechar
+                </button>
+                <button type="button" (click)="salvarCliente()"
+                        class="btn btn-primary">Salvar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  
+    <div class="modal fade" id="deleteClienteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel"
+         aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModelLabel">Deletar Cliente</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">X</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Confirma a exclusão do Cliente {{clienteSelecionado.nome}}?</p>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+              <button (click)="deletar(clienteSelecionado.id)" class="btn btn-danger" data-dismiss="modal">Sim</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="clientes?.length === 0" class="col-lg-12 col-md-12 col-xl-12">
+    <div class="alert alert-info" role="alert">
+      <h4 class="alert-heading">Sem clientes!</h4>
+      <p>Não há cliente cadastrado.</p>
+    </div>
+  </div>
+  
